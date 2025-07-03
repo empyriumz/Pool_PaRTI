@@ -3,3 +3,4 @@ creating_fasta_files/.ipynb_checkpoints
 pooling_generator/.ipynb_checkpoints
 post_pooling_seq_vectors/
 token_embedding_generator/.ipynb_checkpoints
+__pycache__/

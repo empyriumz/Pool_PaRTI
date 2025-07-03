@@ -1,8 +1,6 @@
 import numpy as np
 import networkx as nx
-import math
 import torch
-import os
 
 
 class TokenToSequencePooler:
@@ -53,8 +51,7 @@ class TokenToSequencePooler:
     def create_pooled_matrices_across_layers(self, mtx_all_layers):
         # Perform max pooling across layers by selecting the maximum values across attention layers.
         # Returns the matrix after pooling the attention layers.
-    
-        mtx_max_of_max = torch.max(mtx_all_layers[1], dim=1)[0].numpy()
+        mtx_max_of_max = torch.max(torch.from_numpy(mtx_all_layers[1]), dim=1)[0].numpy()
         return mtx_max_of_max
             
             
@@ -89,7 +86,8 @@ class TokenToSequencePooler:
             print(f'You are using a single layer matrix of shape {self.attn_all_layers.shape}. This attention matrix may already be pooled across the heads.')
             matrix_to_pool = self.attn_all_layers
         else:
-            matrix_to_pool = self.create_pooled_matrices_across_layers(mtx_all_layers=self.attn_all_layers).squeeze().numpy()
+            matrix_to_pool = self.create_pooled_matrices_across_layers(mtx_all_layers=self.attn_all_layers).squeeze()
+
         
 
         dict_importance = self._page_rank(matrix_to_pool, 
@@ -156,12 +154,4 @@ class TokenToSequencePooler:
     
         total = sum(dict_importance.values())
         return {k: v / total for k, v in dict_importance.items()}
-
-
-    
-
-
-
-
-
 
